@@ -3,7 +3,7 @@ import logging
 from githubapp import CreateBranchEvent, Flask
 
 # Create a Flask app
-app = Flask("PR Creator")
+app = Flask("Pull Request Generator")
 
 logging.basicConfig(
     format="%(levelname)s:%(module)s:%(funcName)s:%(message)s", level=logging.INFO
