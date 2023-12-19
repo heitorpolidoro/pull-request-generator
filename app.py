@@ -1,17 +1,20 @@
 import logging
 import os
 
+from github import Github
+from githubapp import CreateBranchEvent, Flask
+from githubapp.Event import Event
+
 # log = logging.getLogger('werkzeug')
 # log.setLevel(logging.INFO)
 
-from githubapp import Flask, CreateBranchEvent
-from githubapp.Event import Event
-from github import Github
 
 # Create a Flask app
 app = Flask("PR Creator")
 
-logging.basicConfig(format="%(levelname)s:%(module)s:%(funcName)s:%(message)s", level=logging.INFO)
+logging.basicConfig(
+    format="%(levelname)s:%(module)s:%(funcName)s:%(message)s", level=logging.INFO
+)
 
 
 @app.CreateBranch
