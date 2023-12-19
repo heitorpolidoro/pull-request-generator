@@ -15,3 +15,4 @@ def test_create_pr():
         body="PR automatically created",
         draft=False,
     )
+    event.repository.create_pull.return_value.enable_automerge.assert_called_once()
