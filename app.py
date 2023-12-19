@@ -1,11 +1,13 @@
 import logging
 
-from githubapp import Flask, CreateBranchEvent
+from githubapp import CreateBranchEvent, Flask
 
 # Create a Flask app
 app = Flask("PR Creator")
 
-logging.basicConfig(format="%(levelname)s:%(module)s:%(funcName)s:%(message)s", level=logging.INFO)
+logging.basicConfig(
+    format="%(levelname)s:%(module)s:%(funcName)s:%(message)s", level=logging.INFO
+)
 
 
 @app.CreateBranch
