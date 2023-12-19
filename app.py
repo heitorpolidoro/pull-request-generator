@@ -1,13 +1,6 @@
 import logging
-import os
 
-from github import Github
 from githubapp import CreateBranchEvent, Flask
-from githubapp.Event import Event
-
-# log = logging.getLogger('werkzeug')
-# log.setLevel(logging.INFO)
-
 
 # Create a Flask app
 app = Flask("PR Creator")
