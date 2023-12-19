@@ -1,1 +1,1 @@
-GithubAppHandler[flask]==0.0.2
+GithubAppHandler[flask]==0.0.3
