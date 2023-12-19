@@ -13,4 +13,5 @@ def test_create_pr():
         "feature",
         title="feature",
         body="PR automatically created",
-        draft=False)
+        draft=False,
+    )
