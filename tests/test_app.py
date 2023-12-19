@@ -20,4 +20,5 @@ def test_create_pr(repo):
         "feature",
         title="feature",
         body="PR automatically created",
-        draft=False)
+        draft=False,
+    )
