@@ -8,7 +8,7 @@ def test_create_pr():
     event.repository.default_branch = "master"
     event.ref = "feature"
     create_branch_handler(event)
-    event.repository.get_pulls = Mock(return_value=[Mock()])
+    event.repository.get_pulls = Mock(return_value=[Mock(), Mock()])
     create_branch_handler(event)
     if event.repository.get_pulls.return_value:
         event.repository.get_pulls.return_value[0].enable_automerge.assert_called_once()
