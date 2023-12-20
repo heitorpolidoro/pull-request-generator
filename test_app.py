@@ -33,6 +33,4 @@ def test_enable_automerge_on_existing_pr(event):
     event.repository.get_pulls.return_value = [existing_pr]
     create_branch_handler(event)
     event.repository.create_pull.assert_not_called()
-    existing_pr.enable_automerge.assert_called_once_with(
-        merge_method="SQUASH"
-    )
+    existing_pr.enable_automerge.assert_called_once_with(merge_method="SQUASH")
