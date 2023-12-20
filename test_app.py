@@ -1,12 +1,20 @@
 from unittest.mock import Mock
 
+import pytest
+
 from app import create_branch_handler
 
 
-def test_create_pr():
+@pytest.fixture
+def event():
     event = Mock()
     event.repository.default_branch = "master"
     event.ref = "feature"
+    return event
+
+
+def test_create_pr(event):
+    event.repository.get_pulls.return_value = []
     create_branch_handler(event)
     event.repository.create_pull.assert_called_once_with(
         "master",
@@ -15,4 +23,14 @@ def test_create_pr():
         body="PR automatically created",
         draft=False,
     )
-    event.repository.create_pull.return_value.enable_automerge.assert_called_once()
+    event.repository.create_pull.return_value.enable_automerge.assert_called_once_with(
+        merge_method="SQUASH"
+    )
+
+
+def test_enable_automerge_on_existing_pr(event):
+    existing_pr = Mock()
+    event.repository.get_pulls.return_value = [existing_pr]
+    create_branch_handler(event)
+    event.repository.create_pull.assert_not_called()
+    existing_pr.enable_automerge.assert_called_once_with(merge_method="SQUASH")
