@@ -1,6 +1,8 @@
 import logging
 
-from githubapp import CreateBranchEvent, Flask
+from githubapp.events import CreateBranchEvent
+from githubapp.handlers.flask import Flask
+from githubapp.webhook_handler import webhook_handler
 
 # Create a Flask app
 app = Flask("Pull Request Generator")
@@ -10,7 +12,7 @@ logging.basicConfig(
 )
 
 
-@app.CreateBranch
+@webhook_handler(CreateBranchEvent)
 def create_branch_handler(event: CreateBranchEvent):
     repo = event.repository
     logging.info(f"Branch {event.ref} created in {repo.full_name}")
