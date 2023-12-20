@@ -1,8 +1,8 @@
 import logging
 
 from flask import Flask, request
-from githubapp.events import CreateBranchEvent
 from github import PullRequest
+from githubapp.events import CreateBranchEvent
 from githubapp.webhook_handler import WebhookHandler, webhook_handler
 
 # Create a Flask app
@@ -17,12 +17,12 @@ logging.basicConfig(
 def create_branch_handler(event: CreateBranchEvent):
     repo = event.repository
     logging.info(f"Branch {event.ref} created in {repo.full_name}")
-    existing_prs = repo.get_pulls(state='open', head=event.ref)
+    existing_prs = repo.get_pulls(state="open", head=event.ref)
     if existing_prs:
         pr = existing_prs[0]
         pr.enable_automerge(merge_method="SQUASH")
         return
-    
+
     # Continue with creating a new PR if none exist for the branch
 
     logging.info("-" * 50 + f"Creating PR for {event.ref} branch {repo.default_branch}")

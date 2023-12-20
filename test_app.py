@@ -14,10 +14,12 @@ def test_create_pr():
         event.repository.get_pulls.return_value[0].enable_automerge.assert_called_once()
     else:
         event.repository.create_pull.assert_called_once_with(
-        "master",
-        "feature",
-        title="feature",
-        body="PR automatically created",
-        draft=False,
-    )
-        event.repository.create_pull.return_value.enable_automerge.assert_called_once_with(merge_method="SQUASH")
+            "master",
+            "feature",
+            title="feature",
+            body="PR automatically created",
+            draft=False,
+        )
+        event.repository.create_pull.return_value.enable_automerge.assert_called_once_with(
+            merge_method="SQUASH"
+        )
