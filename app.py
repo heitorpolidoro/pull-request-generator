@@ -2,7 +2,7 @@ import logging
 
 from flask import Flask, request
 from githubapp.events import CreateBranchEvent
-from githubapp.webhook_handler import webhook_handler, WebhookHandler
+from githubapp.webhook_handler import WebhookHandler, webhook_handler
 
 # Create a Flask app
 app = Flask("Pull Request Generator")
