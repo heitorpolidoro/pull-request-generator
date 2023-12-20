@@ -1,7 +1,8 @@
 import logging
 
+from flask import Flask, request
 from githubapp.events import CreateBranchEvent
-from githubapp.handlers.flask import Flask
+from githubapp.handlers import Handler
 from githubapp.webhook_handler import webhook_handler
 
 # Create a Flask app
@@ -25,3 +26,16 @@ def create_branch_handler(event: CreateBranchEvent):
         draft=False,
     )
     pr.enable_automerge()
+
+
+@app.route("/", methods=["GET"])
+def webhook():
+    return Handler.root("Pull Request Generator")
+
+
+@app.route("/webhook", methods=["POST"])
+def webhook():
+    headers = dict(request.headers)
+    body = request.json
+    Handler.handle(headers, body)
+    return "OK"
