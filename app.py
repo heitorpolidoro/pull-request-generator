@@ -15,7 +15,8 @@ sentry_sdk.init(
 
 logging.basicConfig(
     stream=sys.stdout,
-    format="%(levelname)s:%(module)s:%(funcName)s:%(message)s", level=logging.INFO
+    format="%(levelname)s:%(module)s:%(funcName)s:%(message)s",
+    level=logging.INFO,
 )
 
 
