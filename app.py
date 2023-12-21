@@ -1,4 +1,5 @@
 import logging
+import sys
 
 import sentry_sdk
 from flask import Flask, request
@@ -13,6 +14,7 @@ sentry_sdk.init(
 )
 
 logging.basicConfig(
+    stream=sys.stdout,
     format="%(levelname)s:%(module)s:%(funcName)s:%(message)s", level=logging.INFO
 )
 
