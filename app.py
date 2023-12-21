@@ -4,15 +4,16 @@ import sys
 import sentry_sdk
 from flask import Flask, request
 from github import PullRequest
+from github.Repository import Repository
 from githubapp.events import CreateBranchEvent
-from githubapp.webhook_handler import WebhookHandler, webhook_handler
+from githubapp import webhook_handler
 
 # Create a Flask app
 app = Flask("Pull Request Generator")
 sentry_sdk.init(
     "https://575b73d4722bd4f8cc8bafb0274e4480@o305287.ingest.sentry.io/4506434483453952"
 )
-
+logger = logging.getLogger(__name__)
 logging.basicConfig(
     stream=sys.stdout,
     format="%(levelname)s:%(module)s:%(funcName)s:%(message)s",
@@ -20,19 +21,23 @@ logging.basicConfig(
 )
 
 
-@webhook_handler(CreateBranchEvent)
+
+
+@webhook_handler.webhook_handler(CreateBranchEvent)
 def create_branch_handler(event: CreateBranchEvent):
     repo = event.repository
-    logging.info(f"Branch {event.ref} created in {repo.full_name}")
-    if existing_prs := repo.get_pulls(state="open", head=event.ref):
-        logging.info(
+    print(f"Branch {repo.owner.login}:{event.ref} created in {repo.full_name}")
+    logger.info(f"Branch {repo.owner.login}:{event.ref} created in {repo.full_name}")
+    if pr := next(iter(repo.get_pulls(state="open", head=f"{repo.owner.login}:{event.ref}")), None):
+        print(f"PR already exists for '{repo.owner.login}:{event.ref}' into '{repo.default_branch} (PR#{pr.number})'")
+        logger.info(
             "-" * 50
-            + f"PR already exists for '{event.ref}' into '{repo.default_branch}'"
+            + f"PR already exists for '{repo.owner.login}:{event.ref}' into '{repo.default_branch}'"
         )
-        pr = existing_prs[0]
     else:
-        logging.info(
-            "-" * 50 + f"Creating PR for '{event.ref}' into '{repo.default_branch}'"
+        print(f"Creating PR for '{repo.owner.login}:{event.ref}' into '{repo.default_branch}'")
+        logger.info(
+            "-" * 50 + f"Creating PR for '{repo.owner.login}:{event.ref}' into '{repo.default_branch}'"
         )
         pr = repo.create_pull(
             repo.default_branch,
@@ -41,17 +46,20 @@ def create_branch_handler(event: CreateBranchEvent):
             body="PR automatically created",
             draft=False,
         )
+        print(f"PR for '{repo.owner.login}:{event.ref}' into '{repo.default_branch} created")
+    print(f"Enabling automerge for PR#{pr.number}")
     pr.enable_automerge(merge_method="SQUASH")
+    print(f"Automerge for PR#{pr.number} enabled")
 
 
 @app.route("/", methods=["GET"])
 def root():
-    return WebhookHandler.root("Pull Request Generator")()
+    return webhook_handler.root("Pull Request Generator")()
 
 
 @app.route("/", methods=["POST"])
 def webhook():
     headers = dict(request.headers)
     body = request.json
-    WebhookHandler.handle(headers, body)
+    webhook_handler.handle(headers, body)
     return "OK"
