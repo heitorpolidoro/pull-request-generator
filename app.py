@@ -25,12 +25,14 @@ def create_branch_handler(event: CreateBranchEvent):
     print(f"Branch {event.ref} created in {repo.full_name}")
     logging.info(f"Branch {event.ref} created in {repo.full_name}")
     if existing_prs := repo.get_pulls(state="open", head=event.ref):
+        pr = existing_prs[0]
+        print(f"PR already exists for '{event.ref}' into '{repo.default_branch} (PR#{pr.number})'")
         logging.info(
             "-" * 50
             + f"PR already exists for '{event.ref}' into '{repo.default_branch}'"
         )
-        pr = existing_prs[0]
     else:
+        print(f"Creating PR for '{event.ref}' into '{repo.default_branch}'")
         logging.info(
             "-" * 50 + f"Creating PR for '{event.ref}' into '{repo.default_branch}'"
         )
@@ -41,7 +43,10 @@ def create_branch_handler(event: CreateBranchEvent):
             body="PR automatically created",
             draft=False,
         )
+        print(f"PR for '{event.ref}' into '{repo.default_branch} created'")
+    print(f"Enabling automerge for PR#{pr.number}")
     pr.enable_automerge(merge_method="SQUASH")
+    print(f"Automerge for PR#{pr.number} enabled")
 
 
 @app.route("/", methods=["GET"])
