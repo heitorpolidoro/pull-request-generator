@@ -15,7 +15,8 @@ sentry_sdk.init(
 
 logging.basicConfig(
     stream=sys.stdout,
-    format="%(levelname)s:%(module)s:%(funcName)s:%(message)s", level=logging.INFO
+    format="%(levelname)s:%(module)s:%(funcName)s:%(message)s",
+    level=logging.INFO,
 )
 
 
@@ -25,16 +26,23 @@ def create_branch_handler(event: CreateBranchEvent):
     print(repo.owner)
     print(f"p:Branch {repo.owner.login}:{event.ref} created in {repo.full_name}")
     logging.info(f"Branch {repo.owner.login}:{event.ref} created in {repo.full_name}")
-    if pr := next(iter(repo.get_pulls(state="open", head=f"{repo.owner.login}:{event.ref}")), None):
-        print(f"p:PR already exists for '{repo.owner.login}:{event.ref}' into '{repo.default_branch} (PR#{pr.number})'")
+    if pr := next(
+        iter(repo.get_pulls(state="open", head=f"{repo.owner.login}:{event.ref}")), None
+    ):
+        print(
+            f"p:PR already exists for '{repo.owner.login}:{event.ref}' into '{repo.default_branch} (PR#{pr.number})'"
+        )
         logging.info(
             "-" * 50
             + f"PR already exists for '{repo.owner.login}:{event.ref}' into '{repo.default_branch}'"
         )
     else:
-        print(f"p:Creating PR for '{repo.owner.login}:{event.ref}' into '{repo.default_branch}'")
+        print(
+            f"p:Creating PR for '{repo.owner.login}:{event.ref}' into '{repo.default_branch}'"
+        )
         logging.info(
-            "-" * 50 + f"Creating PR for '{repo.owner.login}:{event.ref}' into '{repo.default_branch}'"
+            "-" * 50
+            + f"Creating PR for '{repo.owner.login}:{event.ref}' into '{repo.default_branch}'"
         )
         pr = repo.create_pull(
             repo.default_branch,
@@ -43,7 +51,9 @@ def create_branch_handler(event: CreateBranchEvent):
             body="PR automatically created",
             draft=False,
         )
-        print(f"p:PR for '{repo.owner.login}:{event.ref}' into '{repo.default_branch} created'")
+        print(
+            f"p:PR for '{repo.owner.login}:{event.ref}' into '{repo.default_branch} created'"
+        )
     print(f"p:Enabling automerge for PR#{pr.number}")
     pr.enable_automerge(merge_method="SQUASH")
     print(f"p:Automerge for PR#{pr.number} enabled")
