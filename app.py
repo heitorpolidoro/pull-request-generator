@@ -4,6 +4,7 @@ import sys
 import sentry_sdk
 from flask import Flask, request
 from github import PullRequest
+from github.Repository import Repository
 from githubapp.events import CreateBranchEvent
 from githubapp.webhook_handler import WebhookHandler, webhook_handler
 
@@ -17,6 +18,8 @@ logging.basicConfig(
     stream=sys.stdout,
     format="%(levelname)s:%(module)s:%(funcName)s:%(message)s", level=logging.INFO
 )
+
+
 
 
 @webhook_handler(CreateBranchEvent)
