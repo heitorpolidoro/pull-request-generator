@@ -22,6 +22,7 @@ logging.basicConfig(
 @webhook_handler(CreateBranchEvent)
 def create_branch_handler(event: CreateBranchEvent):
     repo = event.repository
+    print(f"Branch {event.ref} created in {repo.full_name}")
     logging.info(f"Branch {event.ref} created in {repo.full_name}")
     if existing_prs := repo.get_pulls(state="open", head=event.ref):
         logging.info(
