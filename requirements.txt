@@ -1,1 +1,2 @@
 github-app-handler[flask]==0.0.9
+sentry-sdk
