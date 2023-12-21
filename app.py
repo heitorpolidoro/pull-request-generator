@@ -1,4 +1,5 @@
 import logging
+import sentry_sdk
 
 from flask import Flask, request
 from github import PullRequest
@@ -7,6 +8,7 @@ from githubapp.webhook_handler import WebhookHandler, webhook_handler
 
 # Create a Flask app
 app = Flask("Pull Request Generator")
+sentry_sdk.init('https://575b73d4722bd4f8cc8bafb0274e4480@o305287.ingest.sentry.io/4506434483453952')
 
 logging.basicConfig(
     format="%(levelname)s:%(module)s:%(funcName)s:%(message)s", level=logging.INFO
