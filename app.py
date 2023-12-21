@@ -15,7 +15,8 @@ sentry_sdk.init(
 
 logging.basicConfig(
     stream=sys.stdout,
-    format="%(levelname)s:%(module)s:%(funcName)s:%(message)s", level=logging.INFO
+    format="%(levelname)s:%(module)s:%(funcName)s:%(message)s",
+    level=logging.INFO,
 )
 
 
@@ -26,7 +27,9 @@ def create_branch_handler(event: CreateBranchEvent):
     logging.info(f"Branch {event.ref} created in {repo.full_name}")
     if existing_prs := repo.get_pulls(state="open", head=event.ref):
         pr = existing_prs[0]
-        print(f"PR already exists for '{event.ref}' into '{repo.default_branch} (PR#{pr.number})'")
+        print(
+            f"PR already exists for '{event.ref}' into '{repo.default_branch} (PR#{pr.number})'"
+        )
         logging.info(
             "-" * 50
             + f"PR already exists for '{event.ref}' into '{repo.default_branch}'"
