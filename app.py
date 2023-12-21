@@ -3,8 +3,6 @@ import sys
 
 import sentry_sdk
 from flask import Flask, request
-from github import PullRequest
-from github.Repository import Repository
 from githubapp import webhook_handler
 from githubapp.events import CreateBranchEvent
 
