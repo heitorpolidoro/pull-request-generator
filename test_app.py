@@ -39,6 +39,12 @@ def mock_sentry_init():
 
 
 def test_sentry_sdk_initialization(mock_sentry_init):
+    """
+    Test function that checks if Sentry SDK initialization is done correctly.
+
+    Uses the `mock_sentry_init` fixture to mock the `sentry_sdk.init` function. Asserts
+    that it is called once with a specific DSN argument.
+    """
     mock_sentry_init.assert_called_once_with(
         "https://575b73d4722bd4f8cc8bafb0274e4480@o305287.ingest.sentry.io/4506434483453952"
     )
