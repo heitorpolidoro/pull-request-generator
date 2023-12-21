@@ -22,19 +22,19 @@ logging.basicConfig(
 @webhook_handler(CreateBranchEvent)
 def create_branch_handler(event: CreateBranchEvent):
     repo = event.repository
-    print(f"Branch {event.ref} created in {repo.full_name}")
-    logging.info(f"Branch {event.ref} created in {repo.full_name}")
-    if existing_prs := repo.get_pulls(state="open", head=event.ref):
-        pr = existing_prs[0]
-        print(f"PR already exists for '{event.ref}' into '{repo.default_branch} (PR#{pr.number})'")
+    print(repo.owner)
+    print(f"p:Branch {repo.owner.login}:{event.ref} created in {repo.full_name}")
+    logging.info(f"Branch {repo.owner.login}:{event.ref} created in {repo.full_name}")
+    if pr := next(iter(repo.get_pulls(state="open", head=f"{repo.owner.login}:{event.ref}")), None):
+        print(f"p:PR already exists for '{repo.owner.login}:{event.ref}' into '{repo.default_branch} (PR#{pr.number})'")
         logging.info(
             "-" * 50
-            + f"PR already exists for '{event.ref}' into '{repo.default_branch}'"
+            + f"PR already exists for '{repo.owner.login}:{event.ref}' into '{repo.default_branch}'"
         )
     else:
-        print(f"Creating PR for '{event.ref}' into '{repo.default_branch}'")
+        print(f"p:Creating PR for '{repo.owner.login}:{event.ref}' into '{repo.default_branch}'")
         logging.info(
-            "-" * 50 + f"Creating PR for '{event.ref}' into '{repo.default_branch}'"
+            "-" * 50 + f"Creating PR for '{repo.owner.login}:{event.ref}' into '{repo.default_branch}'"
         )
         pr = repo.create_pull(
             repo.default_branch,
@@ -43,10 +43,10 @@ def create_branch_handler(event: CreateBranchEvent):
             body="PR automatically created",
             draft=False,
         )
-        print(f"PR for '{event.ref}' into '{repo.default_branch} created'")
-    print(f"Enabling automerge for PR#{pr.number}")
+        print(f"p:PR for '{repo.owner.login}:{event.ref}' into '{repo.default_branch} created'")
+    print(f"p:Enabling automerge for PR#{pr.number}")
     pr.enable_automerge(merge_method="SQUASH")
-    print(f"Automerge for PR#{pr.number} enabled")
+    print(f"p:Automerge for PR#{pr.number} enabled")
 
 
 @app.route("/", methods=["GET"])
