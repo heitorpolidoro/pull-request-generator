@@ -1,6 +1,7 @@
 from unittest.mock import Mock
 
 import pytest
+import sentry_sdk
 
 from app import create_branch_handler
 
@@ -25,6 +26,21 @@ def test_create_pr(event):
     )
     event.repository.create_pull.return_value.enable_automerge.assert_called_once_with(
         merge_method="SQUASH"
+    )
+
+
+from unittest.mock import patch
+
+
+@pytest.fixture(autouse=True)
+def mock_sentry_init():
+    with patch("sentry_sdk.init") as mock_init:
+        yield mock_init
+
+
+def test_sentry_sdk_initialization(mock_sentry_init):
+    mock_sentry_init.assert_called_once_with(
+        "https://575b73d4722bd4f8cc8bafb0274e4480@o305287.ingest.sentry.io/4506434483453952"
     )
 
 
