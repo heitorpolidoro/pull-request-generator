@@ -25,6 +25,7 @@ def test_create_pr(event):
         draft=False,
     )
 
+
 # Test that sentry_sdk.init is not called
 @pytest.mark.sentry_test
 def test_sentry_sdk_initialization_not_called(mock_sentry_init):
@@ -39,10 +40,13 @@ def test_sentry_sdk_initialization_not_called(mock_sentry_init):
 @pytest.mark.sentry_test
 def test_sentry_sdk_initialization_invalid_url(mock_sentry_init):
     invalid_dsn = "not a dsn"
-    with patch('sentry_sdk.init', side_effect=Exception("Invalid DSN")) as mock_init_invalid:
+    with patch(
+        "sentry_sdk.init", side_effect=Exception("Invalid DSN")
+    ) as mock_init_invalid:
         with pytest.raises(Exception):
             sentry_sdk.init(invalid_dsn)
         mock_init_invalid.assert_called_once_with(invalid_dsn)
+
 
 from unittest.mock import patch
 
