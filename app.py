@@ -6,7 +6,7 @@ from flask import Flask, request
 from github import PullRequest
 from github.Repository import Repository
 from githubapp.events import CreateBranchEvent
-from githubapp.webhook_handler import WebhookHandler, webhook_handler
+from githubapp import webhook_handler
 
 # Create a Flask app
 app = Flask("Pull Request Generator")
@@ -22,7 +22,7 @@ logging.basicConfig(
 
 
 
-@webhook_handler(CreateBranchEvent)
+@webhook_handler.webhook_handler(CreateBranchEvent)
 def create_branch_handler(event: CreateBranchEvent):
     repo = event.repository
     print(f"Branch {repo.owner.login}:{event.ref} created in {repo.full_name}")
@@ -53,12 +53,12 @@ def create_branch_handler(event: CreateBranchEvent):
 
 @app.route("/", methods=["GET"])
 def root():
-    return WebhookHandler.root("Pull Request Generator")()
+    return webhook_handler.root("Pull Request Generator")()
 
 
 @app.route("/", methods=["POST"])
 def webhook():
     headers = dict(request.headers)
     body = request.json
-    WebhookHandler.handle(headers, body)
+    webhook_handler.handle(headers, body)
     return "OK"
