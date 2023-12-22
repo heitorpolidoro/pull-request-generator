@@ -50,23 +50,23 @@ def enable_auto_merge(pr):
     pr.enable_automerge(merge_method="SQUASH")
 
 
-def get_or_create_pr(repo, branch):
+def get_or_create_pr(repository, branch):
     """
     Get a existing PR or create a new one if none exists
-    :param repo:
+    :param repository:
     :param branch:
     :return: The created or recovered PR or None if no commits between 'master' and 'branch'
     """
-    if pr := get_existing_pr(repo, f"{repo.owner.login}:{branch}"):
+    if pr := get_existing_pr(repository, f"{repository.owner.login}:{branch}"):
         print(
-            f"PR already exists for '{repo.owner.login}:{branch}' into '{repo.default_branch} (PR#{pr.number})'"
+            f"PR already exists for '{repository.owner.login}:{branch}' into '{repository.default_branch} (PR#{pr.number})'"
         )
         logger.info(
             "-" * 50 + "PR already exists for '%s:%s' into '%s'",
-            repo.owner.login,
+            repository.owner.login,
             branch,
-            repo.default_branch,
+            repository.default_branch,
         )
     else:
-        pr = create_pr(repo, branch)
+        pr = create_pr(repository, branch)
     return pr

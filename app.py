@@ -39,7 +39,7 @@ def create_branch_handler(event: CreateBranchEvent):
         "Branch %s:%s created in %s", repo.owner.login, event.ref, repo.full_name
     )
 
-    if pr := get_or_create_pr(event, event.ref):
+    if pr := get_or_create_pr(event.repository, event.ref):
         enable_auto_merge(pr)
 
 
