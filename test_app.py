@@ -56,6 +56,11 @@ class TestApp(TestCase):
         assert response.text == "Pull Request Generator App up and running!"
 
     def test_webhook(self):
+        """
+        Test the webhook handler of the application.
+        This test ensures that the webhook handler is working correctly.
+        It mocks the `handle` function of the `webhook_handler` module, sends a POST request to the root endpoint ("/") with a specific JSON payload and headers, and checks that the `handle` function is called with the correct arguments.
+        """
         with patch("app.webhook_handler.handle") as mock_handle:
             request_json = {"action": "opened", "number": 1}
             headers = {
