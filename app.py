@@ -8,9 +8,15 @@ import sys
 import sentry_sdk
 from flask import Flask, request
 from github import GithubException
-from pr_handler import log_branch_creation, get_existing_pr, create_pr, enable_auto_merge
 from githubapp import webhook_handler
 from githubapp.events import CreateBranchEvent
+
+from pr_handler import (
+    create_pr,
+    enable_auto_merge,
+    get_existing_pr,
+    log_branch_creation,
+)
 
 # Create a Flask app
 app = Flask("Pull Request Generator")
