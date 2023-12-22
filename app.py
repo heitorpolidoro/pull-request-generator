@@ -2,6 +2,10 @@
 This file contains the main application logic for the Pull Request Generator,
 including a webhook handler for creating pull requests when new branches are created.
 """
+"""
+This file contains the main application logic for the Pull Request Generator,
+including a webhook handler for creating pull requests when new branches are created.
+"""
 import logging
 import sys
 
