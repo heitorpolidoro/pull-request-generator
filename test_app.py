@@ -46,6 +46,11 @@ class TestApp(TestCase):
         sentry_sdk.flush()
 
     def test_root(self):
+        """
+        Test the root endpoint of the application.
+        This test ensures that the root endpoint ("/") of the application is working correctly.
+        It sends a GET request to the root endpoint and checks that the response status code is 200 and the response text is "Pull Request Generator App up and running!".
+        """
         response = self.app.get("/")
         assert response.status_code == 200
         assert response.text == "Pull Request Generator App up and running!"
