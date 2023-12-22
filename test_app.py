@@ -70,11 +70,21 @@ class TestApp(TestCase):
         sentry_sdk.flush()
 
     def test_root(self):
+        """
+        Test the root endpoint of the application.
+        This test ensures that the root endpoint ("/") of the application is working correctly.
+        It sends a GET request to the root endpoint and checks that the response status code is 200 and the response text is "Pull Request Generator App up and running!".
+        """
         response = self.app.get("/")
         assert response.status_code == 200
         assert response.text == "Pull Request Generator App up and running!"
 
     def test_webhook(self):
+        """
+        Test the webhook handler of the application.
+        This test ensures that the webhook handler is working correctly.
+        It mocks the `handle` function of the `webhook_handler` module, sends a POST request to the root endpoint ("/") with a specific JSON payload and headers, and checks that the `handle` function is called with the correct arguments.
+        """
         with patch("app.webhook_handler.handle") as mock_handle:
             request_json = {"action": "opened", "number": 1}
             headers = {
