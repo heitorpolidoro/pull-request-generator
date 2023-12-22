@@ -45,10 +45,54 @@ class TestApp(TestCase):
     def tearDown(self):
         sentry_sdk.flush()
 
+    def test_root_failure(self):
+        response = self.app.get("/")
+        assert response.status_code != 200
+
     def test_root(self):
         response = self.app.get("/")
         assert response.status_code == 200
         assert response.text == "Pull Request Generator App up and running!"
+
+    def test_webhook_failure(self):
+        request_json = {"action": "opened", "number": 1}
+        headers = {
+            "User-Agent": "Werkzeug/3.0.1",
+            "Host": "localhost",
+            "Content-Type": "application/json",
+            "Content-Length": "33",
+            "X-Github-Event": "pull_request",
+        }
+        response = self.app.post("/", headers=headers, json=request_json)
+        assert response.status_code != 200
+
+    def test_webhook_wrong_action(self):
+        request_json = {"action": "invalid_action", "number": 1}
+        headers = {
+            "User-Agent": "Werkzeug/3.0.1",
+            "Host": "localhost",
+            "Content-Type": "application/json",
+            "Content-Length": "33",
+            "X-Github-Event": "pull_request",
+        }
+        response = self.app.post("/", headers=headers, json=request_json)
+        assert response.status_code != 200
+
+    def test_webhook_no_headers(self):
+        request_json = {"action": "opened", "number": 1}
+        response = self.app.post("/", json=request_json)
+        assert response.status_code != 200
+
+    def test_webhook_no_json(self):
+        headers = {
+            "User-Agent": "Werkzeug/3.0.1",
+            "Host": "localhost",
+            "Content-Type": "application/json",
+            "Content-Length": "33",
+            "X-Github-Event": "pull_request",
+        }
+        response = self.app.post("/", headers=headers)
+        assert response.status_code != 200
 
     def test_webhook(self):
         with patch("app.webhook_handler.handle") as mock_handle:
