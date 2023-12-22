@@ -26,6 +26,7 @@ def create_pr(repo, event):
             body="PR automatically created",
             draft=False,
         )
+        return pr
     except GithubException as ghe:
         if (
             ghe.message
@@ -36,7 +37,6 @@ def create_pr(repo, event):
             )
         else:
             raise
-    return pr
 
 
 def enable_auto_merge(pr):

@@ -7,7 +7,6 @@ import sys
 
 import sentry_sdk
 from flask import Flask, request
-from github import GithubException
 from githubapp import webhook_handler
 from githubapp.events import CreateBranchEvent
 
@@ -42,10 +41,7 @@ def create_branch_handler(event: CreateBranchEvent):
     repo = event.repository
     # Log branch creation
     log_branch_creation(repo, event)
-        "Branch %s:%s created in %s", repo.owner.login, event.ref, repo.full_name
-    )
-    pr = get_existing_pr(repo, event)
-    if pr:
+    if pr := get_existing_pr(repo, event):
         print(
             f"PR already exists for '{repo.owner.login}:{event.ref}' into '{repo.default_branch} (PR#{pr.number})'"
         )
@@ -57,8 +53,8 @@ def create_branch_handler(event: CreateBranchEvent):
         )
     else:
         pr = create_pr(repo, event)
+    if pr:
         enable_auto_merge(pr)
-        print(f"Automerge for PR#{pr.number} enabled")
 
 
 @app.route("/", methods=["GET"])
