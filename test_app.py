@@ -54,7 +54,7 @@ def test_create_pr_other_exceptions(event):
 
 
 def test_enable_just_automerge_on_existing_pr(event):
-    """This test case tests the create_branch_handler function when a pull request already exists for the new branch. It checks that the function enables auto-merge for the existing pull request and does not create a new pull request."""
+    """This test checks the create_branch_handler function when a pull request already exists for the new branch, expecting auto-merge to be enabled for the existing pull request and no new pull request to be created."""
     existing_pr = Mock()
     event.repository.get_pulls.return_value = [existing_pr]
     create_branch_handler(event)
