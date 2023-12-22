@@ -34,8 +34,7 @@ def test_create_pr(event):
 def test_create_pr_no_commits(event):
     event.repository.get_pulls.return_value = []
     event.repository.create_pull.side_effect = GithubException(
-        422,
-        message="No commits between 'master' and 'feature'"
+        422, message="No commits between 'master' and 'feature'"
     )
     create_branch_handler(event)
 
@@ -43,8 +42,7 @@ def test_create_pr_no_commits(event):
 def test_create_pr_other_exceptions(event):
     event.repository.get_pulls.return_value = []
     event.repository.create_pull.side_effect = GithubException(
-        422,
-        message="Other exception"
+        422, message="Other exception"
     )
     with pytest.raises(GithubException):
         create_branch_handler(event)
