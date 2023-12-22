@@ -36,6 +36,12 @@ def create_branch_handler(event: CreateBranchEvent):
     If a pull request already exists for the new branch, the function enables auto-merge for the pull request.
     Otherwise, it creates a new pull request and enables auto-merge for it.
     """
+    """
+    This function is a webhook handler that creates a pull request when a new branch is created.
+    It takes a CreateBranchEvent object as a parameter, which contains information about the new branch.
+    If a pull request already exists for the new branch, the function enables auto-merge for the pull request.
+    Otherwise, it creates a new pull request and enables auto-merge for it.
+    """
     repo = event.repository
     print(f"Branch {repo.owner.login}:{event.ref} created in {repo.full_name}")
     logger.info(f"Branch {repo.owner.login}:{event.ref} created in {repo.full_name}")
