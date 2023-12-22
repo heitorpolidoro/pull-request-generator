@@ -1,6 +1,4 @@
-"""
-This file contains test cases for the Pull Request Generator application.
-"""
+"""This file contains test cases for the Pull Request Generator application."""
 from unittest import TestCase
 from unittest.mock import Mock, patch
 
