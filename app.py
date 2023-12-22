@@ -1,5 +1,6 @@
 """
-This file contains the main application logic for the Pull Request Generator, including a webhook handler for creating pull requests when new branches are created.
+This file contains the main application logic for the Pull Request Generator,
+including a webhook handler for creating pull requests when new branches are created.
 """
 import logging
 import sys
@@ -25,12 +26,15 @@ logging.basicConfig(
 
 @webhook_handler.webhook_handler(CreateBranchEvent)
 def create_branch_handler(event: CreateBranchEvent):
-    """This function is a webhook handler that creates a pull request when a new branch is created. It takes a CreateBranchEvent object as a parameter, which contains information about the new branch. If a pull request already exists for the new branch, the function enables auto-merge for the pull request. Otherwise, it creates a new pull request and enables auto-merge for it."""
+    """This function is a webhook handler that creates a pull request when a new branch is created.
+    It takes a CreateBranchEvent object as a parameter, which contains information about the new branch.
+    If a pull request already exists for the new branch, the function enables auto-merge for the pull request.
+    Otherwise, it creates a new pull request and enables auto-merge for it."""
     repo = event.repository
     print(f"Branch {repo.owner.login}:{event.ref} created in {repo.full_name}")
     logger.info(f"Branch {repo.owner.login}:{event.ref} created in {repo.full_name}")
     if pr := next(
-        iter(repo.get_pulls(state="open", head=f"{repo.owner.login}:{event.ref}")), None
+            iter(repo.get_pulls(state="open", head=f"{repo.owner.login}:{event.ref}")), None
     ):
         print(
             f"PR already exists for '{repo.owner.login}:{event.ref}' into '{repo.default_branch} (PR#{pr.number})'"
@@ -60,8 +64,8 @@ def create_branch_handler(event: CreateBranchEvent):
             )
         except GithubException as ghe:
             if (
-                ghe.message
-                == f"No commits between '{repo.default_branch}' and '{event.ref}'"
+                    ghe.message
+                    == f"No commits between '{repo.default_branch}' and '{event.ref}'"
             ):
                 logger.warning(
                     f"No commits between '{repo.default_branch}' and '{event.ref}'"
