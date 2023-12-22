@@ -34,7 +34,7 @@ def create_branch_handler(event: CreateBranchEvent):
     print(f"Branch {repo.owner.login}:{event.ref} created in {repo.full_name}")
     logger.info(f"Branch {repo.owner.login}:{event.ref} created in {repo.full_name}")
     if pr := next(
-            iter(repo.get_pulls(state="open", head=f"{repo.owner.login}:{event.ref}")), None
+        iter(repo.get_pulls(state="open", head=f"{repo.owner.login}:{event.ref}")), None
     ):
         print(
             f"PR already exists for '{repo.owner.login}:{event.ref}' into '{repo.default_branch} (PR#{pr.number})'"
@@ -64,8 +64,8 @@ def create_branch_handler(event: CreateBranchEvent):
             )
         except GithubException as ghe:
             if (
-                    ghe.message
-                    == f"No commits between '{repo.default_branch}' and '{event.ref}'"
+                ghe.message
+                == f"No commits between '{repo.default_branch}' and '{event.ref}'"
             ):
                 logger.warning(
                     f"No commits between '{repo.default_branch}' and '{event.ref}'"
