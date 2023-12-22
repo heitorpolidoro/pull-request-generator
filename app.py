@@ -34,16 +34,20 @@ def create_branch_handler(event: CreateBranchEvent):
     """
     repo = event.repository
     print(f"Branch {repo.owner.login}:{event.ref} created in {repo.full_name}")
-    logger.info("Branch %s:%s created in %s", repo.owner.login, event.ref, repo.full_name)
+    logger.info(
+        "Branch %s:%s created in %s", repo.owner.login, event.ref, repo.full_name
+    )
     if pr := next(
-            iter(repo.get_pulls(state="open", head=f"{repo.owner.login}:{event.ref}")), None
+        iter(repo.get_pulls(state="open", head=f"{repo.owner.login}:{event.ref}")), None
     ):
         print(
             f"PR already exists for '{repo.owner.login}:{event.ref}' into '{repo.default_branch} (PR#{pr.number})'"
         )
         logger.info(
             "-" * 50 + "PR already exists for '%s:%s' into '%s'",
-            repo.owner.login, event.ref, repo.default_branch
+            repo.owner.login,
+            event.ref,
+            repo.default_branch,
         )
     else:
         print(
@@ -51,7 +55,9 @@ def create_branch_handler(event: CreateBranchEvent):
         )
         logger.info(
             "-" * 50 + "Creating PR for '%s:%s' into '%s'",
-            repo.owner.login, event.ref, repo.default_branch
+            repo.owner.login,
+            event.ref,
+            repo.default_branch,
         )
         try:
             pr = repo.create_pull(
@@ -70,8 +76,7 @@ def create_branch_handler(event: CreateBranchEvent):
                 == f"No commits between '{repo.default_branch}' and '{event.ref}'"
             ):
                 logger.warning(
-                    "No commits between '%s' and '%s'",
-                    repo.default_branch, event.ref
+                    "No commits between '%s' and '%s'", repo.default_branch, event.ref
                 )
             else:
                 raise
