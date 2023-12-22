@@ -1,3 +1,6 @@
+"""
+This file contains test cases for the Pull Request Generator application.
+"""
 from unittest import TestCase
 from unittest.mock import Mock, patch
 
@@ -32,6 +35,7 @@ def test_create_pr(event):
 
 
 def test_create_pr_no_commits(event):
+    """This test case tests the create_branch_handler function when there are no commits between the new branch and the default branch. It checks that the function handles this situation correctly by not creating a pull request."""
     event.repository.get_pulls.return_value = []
     event.repository.create_pull.side_effect = GithubException(
         422,
@@ -41,6 +45,7 @@ def test_create_pr_no_commits(event):
 
 
 def test_create_pr_other_exceptions(event):
+    """This test case tests the create_branch_handler function when an exception other than 'No commits between master and feature' is raised. It checks that the function raises the exception as expected."""
     event.repository.get_pulls.return_value = []
     event.repository.create_pull.side_effect = GithubException(
         422,
@@ -51,6 +56,7 @@ def test_create_pr_other_exceptions(event):
 
 
 def test_enable_just_automerge_on_existing_pr(event):
+    """This test case tests the create_branch_handler function when a pull request already exists for the new branch. It checks that the function enables auto-merge for the existing pull request and does not create a new pull request."""
     existing_pr = Mock()
     event.repository.get_pulls.return_value = [existing_pr]
     create_branch_handler(event)
