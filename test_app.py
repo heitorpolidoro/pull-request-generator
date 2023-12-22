@@ -25,7 +25,9 @@ def test_create_pr(event):
         body="PR automatically created",
         draft=False,
     )
-    event.repository.create_pull.return_value.enable_automerge.assert_called_once_with(merge_method="SQUASH")
+    event.repository.create_pull.return_value.enable_automerge.assert_called_once_with(
+        merge_method="SQUASH"
+    )
 
 
 def test_enable_automerge_on_existing_pr(event):
@@ -49,12 +51,14 @@ class TestApp(TestCase):
         assert response.text == "Pull Request Generator App up and running!"
 
     def test_webhook(self):
-        with patch(
-                "app.webhook_handler.handle"
-        ) as mock_handle:
+        with patch("app.webhook_handler.handle") as mock_handle:
             request_json = {"action": "opened", "number": 1}
             headers = {
-                'User-Agent': 'Werkzeug/3.0.1', 'Host': 'localhost', 'Content-Type': 'application/json',
-                'Content-Length': '33', 'X-Github-Event': 'pull_request'}
+                "User-Agent": "Werkzeug/3.0.1",
+                "Host": "localhost",
+                "Content-Type": "application/json",
+                "Content-Length": "33",
+                "X-Github-Event": "pull_request",
+            }
             self.app.post("/", headers=headers, json=request_json)
             mock_handle.assert_called_once_with(headers, request_json)
