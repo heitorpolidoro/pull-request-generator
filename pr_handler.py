@@ -40,6 +40,7 @@ def create_pr(repo, branch):
             )
         else:
             raise
+    return None
 
 
 def enable_auto_merge(pr):
