@@ -3,6 +3,7 @@ import sys
 
 import sentry_sdk
 from flask import Flask, request
+from github import GithubException
 from githubapp import webhook_handler
 from githubapp.events import CreateBranchEvent
 
@@ -42,19 +43,28 @@ def create_branch_handler(event: CreateBranchEvent):
             "-" * 50
             + f"Creating PR for '{repo.owner.login}:{event.ref}' into '{repo.default_branch}'"
         )
-        pr = repo.create_pull(
-            repo.default_branch,
-            event.ref,
-            title=event.ref,
-            body="PR automatically created",
-            draft=False,
-        )
-        print(
-            f"PR for '{repo.owner.login}:{event.ref}' into '{repo.default_branch} created"
-        )
-    print(f"Enabling automerge for PR#{pr.number}")
-    pr.enable_automerge(merge_method="SQUASH")
-    print(f"Automerge for PR#{pr.number} enabled")
+        try:
+            pr = repo.create_pull(
+                repo.default_branch,
+                event.ref,
+                title=event.ref,
+                body="PR automatically created",
+                draft=False,
+            )
+            print(
+                f"PR for '{repo.owner.login}:{event.ref}' into '{repo.default_branch} created"
+            )
+        except GithubException as ghe:
+            if ghe.message == f"No commits between '{repo.default_branch}' and '{event.ref}'":
+                logger.warning(
+                    f"No commits between '{repo.default_branch}' and '{event.ref}'"
+                )
+            else:
+                raise
+    if pr:
+        print(f"Enabling automerge for PR#{pr.number}")
+        pr.enable_automerge(merge_method="SQUASH")
+        print(f"Automerge for PR#{pr.number} enabled")
 
 
 @app.route("/", methods=["GET"])
