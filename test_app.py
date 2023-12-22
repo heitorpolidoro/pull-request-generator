@@ -19,6 +19,7 @@ def event():
 
 
 def test_create_pr(event):
+    """This test verifies the create_branch_handler function's ability to handle a new branch creation event by expecting a new pull request to be created and auto-merge to be enabled for it."""
     event.repository.get_pulls.return_value = []
     create_branch_handler(event)
     event.repository.create_pull.assert_called_once_with(
