@@ -5,12 +5,23 @@ import sentry_sdk
 from flask import Flask, request
 from githubapp import webhook_handler
 from githubapp.events import CreateBranchEvent
+from opentelemetry import trace
+from opentelemetry.propagate import set_global_textmap
+from sentry_sdk.integrations.opentelemetry import SentrySpanProcessor, SentryPropagator
 
+provider = trace.get_tracer_provider()
+provider.add_span_processor(SentrySpanProcessor())
+set_global_textmap(SentryPropagator())
 # Create a Flask app
 app = Flask("Pull Request Generator")
 sentry_sdk.init(
-    "https://575b73d4722bd4f8cc8bafb0274e4480@o305287.ingest.sentry.io/4506434483453952"
+    "https://575b73d4722bd4f8cc8bafb0274e4480@o305287.ingest.sentry.io/4506434483453952",
+    enable_tracing=True,
+
+    # set the instrumenter to use OpenTelemetry instead of Sentry
+    instrumenter="otel",
 )
+
 logger = logging.getLogger(__name__)
 logging.basicConfig(
     stream=sys.stdout,
@@ -25,7 +36,7 @@ def create_branch_handler(event: CreateBranchEvent):
     print(f"Branch {repo.owner.login}:{event.ref} created in {repo.full_name}")
     logger.info(f"Branch {repo.owner.login}:{event.ref} created in {repo.full_name}")
     if pr := next(
-        iter(repo.get_pulls(state="open", head=f"{repo.owner.login}:{event.ref}")), None
+            iter(repo.get_pulls(state="open", head=f"{repo.owner.login}:{event.ref}")), None
     ):
         print(
             f"PR already exists for '{repo.owner.login}:{event.ref}' into '{repo.default_branch} (PR#{pr.number})'"
