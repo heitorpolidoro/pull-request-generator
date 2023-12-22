@@ -12,9 +12,7 @@ def get_existing_pr(repo, head):
     :param head: The branch to check for an existing PR.
     :return: Exists PR or None.
     """
-    return next(
-        iter(repo.get_pulls(state="open", head=head)), None
-    )
+    return next(iter(repo.get_pulls(state="open", head=head)), None)
 
 
 def create_pr(repo, branch):
@@ -36,10 +34,7 @@ def create_pr(repo, branch):
         )
         return pr
     except GithubException as ghe:
-        if (
-            ghe.message
-            == f"No commits between '{repo.default_branch}' and '{branch}'"
-        ):
+        if ghe.message == f"No commits between '{repo.default_branch}' and '{branch}'":
             logger.warning(
                 "No commits between '%s' and '%s'", repo.default_branch, branch
             )

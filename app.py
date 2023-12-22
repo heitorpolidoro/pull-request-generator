@@ -10,10 +10,7 @@ from flask import Flask, request
 from githubapp import webhook_handler
 from githubapp.events import CreateBranchEvent
 
-from pr_handler import (
-    enable_auto_merge,
-    get_or_create_pr,
-)
+from pr_handler import enable_auto_merge, get_or_create_pr
 
 # Create a Flask app
 app = Flask("Pull Request Generator")
