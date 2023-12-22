@@ -38,8 +38,7 @@ def test_create_pr_no_commits(event):
     """This test case tests the create_branch_handler function when there are no commits between the new branch and the default branch. It checks that the function handles this situation correctly by not creating a pull request."""
     event.repository.get_pulls.return_value = []
     event.repository.create_pull.side_effect = GithubException(
-        422,
-        message="No commits between 'master' and 'feature'"
+        422, message="No commits between 'master' and 'feature'"
     )
     create_branch_handler(event)
 
@@ -48,8 +47,7 @@ def test_create_pr_other_exceptions(event):
     """This test case tests the create_branch_handler function when an exception other than 'No commits between master and feature' is raised. It checks that the function raises the exception as expected."""
     event.repository.get_pulls.return_value = []
     event.repository.create_pull.side_effect = GithubException(
-        422,
-        message="Other exception"
+        422, message="Other exception"
     )
     with pytest.raises(GithubException):
         create_branch_handler(event)

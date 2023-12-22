@@ -59,7 +59,10 @@ def create_branch_handler(event: CreateBranchEvent):
                 f"PR for '{repo.owner.login}:{event.ref}' into '{repo.default_branch} created"
             )
         except GithubException as ghe:
-            if ghe.message == f"No commits between '{repo.default_branch}' and '{event.ref}'":
+            if (
+                ghe.message
+                == f"No commits between '{repo.default_branch}' and '{event.ref}'"
+            ):
                 logger.warning(
                     f"No commits between '{repo.default_branch}' and '{event.ref}'"
                 )
