@@ -11,10 +11,8 @@ from githubapp import webhook_handler
 from githubapp.events import CreateBranchEvent
 
 from pr_handler import (
-    create_pr,
     enable_auto_merge,
-    get_existing_pr,
-    log_branch_creation,
+    get_or_create_pr,
 )
 
 # Create a Flask app
@@ -40,20 +38,11 @@ def create_branch_handler(event: CreateBranchEvent):
     """
     repo = event.repository
     # Log branch creation
-    log_branch_creation(repo, event)
-    if pr := get_existing_pr(repo, event):
-        print(
-            f"PR already exists for '{repo.owner.login}:{event.ref}' into '{repo.default_branch} (PR#{pr.number})'"
-        )
-        logger.info(
-            "-" * 50 + "PR already exists for '%s:%s' into '%s'",
-            repo.owner.login,
-            event.ref,
-            repo.default_branch,
-        )
-    else:
-        pr = create_pr(repo, event)
-    if pr:
+    logger.info(
+        "Branch %s:%s created in %s", repo.owner.login, event.ref, repo.full_name
+    )
+
+    if pr := get_or_create_pr(event, event.ref):
         enable_auto_merge(pr)
 
 
