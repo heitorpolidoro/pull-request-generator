@@ -59,7 +59,8 @@ def get_or_create_pr(repository, branch):
     """
     if pr := get_existing_pr(repository, f"{repository.owner.login}:{branch}"):
         print(
-            f"PR already exists for '{repository.owner.login}:{branch}' into '{repository.default_branch} (PR#{pr.number})'"
+            f"PR already exists for '{repository.owner.login}:{branch}' into "
+            f"'{repository.default_branch} (PR#{pr.number})'"
         )
         logger.info(
             "-" * 50 + "PR already exists for '%s:%s' into '%s'",
