@@ -7,9 +7,10 @@ import sys
 
 import sentry_sdk
 from flask import Flask, request
-from github import GithubException
 from githubapp import webhook_handler
 from githubapp.events import CreateBranchEvent
+
+from pr_handler import enable_auto_merge, get_or_create_pr
 
 # Create a Flask app
 app = Flask("Pull Request Generator")
@@ -33,57 +34,13 @@ def create_branch_handler(event: CreateBranchEvent):
     Otherwise, it creates a new pull request and enables auto-merge for it.
     """
     repo = event.repository
-    print(f"Branch {repo.owner.login}:{event.ref} created in {repo.full_name}")
+    # Log branch creation
     logger.info(
         "Branch %s:%s created in %s", repo.owner.login, event.ref, repo.full_name
     )
-    if pr := next(
-        iter(repo.get_pulls(state="open", head=f"{repo.owner.login}:{event.ref}")), None
-    ):
-        print(
-            f"PR already exists for '{repo.owner.login}:{event.ref}' into '{repo.default_branch} (PR#{pr.number})'"
-        )
-        logger.info(
-            "-" * 50 + "PR already exists for '%s:%s' into '%s'",
-            repo.owner.login,
-            event.ref,
-            repo.default_branch,
-        )
-    else:
-        print(
-            f"Creating PR for '{repo.owner.login}:{event.ref}' into '{repo.default_branch}'"
-        )
-        logger.info(
-            "-" * 50 + "Creating PR for '%s:%s' into '%s'",
-            repo.owner.login,
-            event.ref,
-            repo.default_branch,
-        )
-        try:
-            pr = repo.create_pull(
-                repo.default_branch,
-                event.ref,
-                title=event.ref,
-                body="PR automatically created",
-                draft=False,
-            )
-            print(
-                f"PR for '{repo.owner.login}:{event.ref}' into '{repo.default_branch} created"
-            )
-        except GithubException as ghe:
-            if (
-                ghe.message
-                == f"No commits between '{repo.default_branch}' and '{event.ref}'"
-            ):
-                logger.warning(
-                    "No commits between '%s' and '%s'", repo.default_branch, event.ref
-                )
-            else:
-                raise
-    if pr:
-        print(f"Enabling automerge for PR#{pr.number}")
-        pr.enable_automerge(merge_method="SQUASH")
-        print(f"Automerge for PR#{pr.number} enabled")
+
+    if pr := get_or_create_pr(event.repository, event.ref):
+        enable_auto_merge(pr)
 
 
 @app.route("/", methods=["GET"])
