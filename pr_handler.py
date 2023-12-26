@@ -49,8 +49,7 @@ def create_pr(repo: Repository, branch: str) -> Optional[PullRequest]:
         body = ""
         for issue_num in re.findall(r"issue-(\d+)", branch, re.IGNORECASE):
             issue = repo.get_issue(int(issue_num))
-            if title is None:
-                title = issue.title
+            title = title or issue.title
             body += Template(BODY_ISSUE_TEMPLATE).substitute(
                 title=issue.title,
                 repo_full_name=repo.full_name,

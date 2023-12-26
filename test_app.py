@@ -17,7 +17,8 @@ def event():
     """
     event = Mock()
     event.repository.default_branch = "master"
-    event.ref = "feature"
+    event.repository.full_name = "heitorpolidoro/pull-request-generator"
+    event.ref = "issue-42"
     return event
 
 
@@ -27,12 +28,22 @@ def test_create_pr(event):
     default branch. It checks that the function creates a pull request with the correct parameters.
     """
     event.repository.get_pulls.return_value = []
+    event.repository.get_issue.return_value.title = "feature"
+    event.repository.get_issue.return_value.body = "feature body"
+    event.repository.get_issue.return_value.number = 42
+    expected_body = """### [feature](https://github.com/heitorpolidoro/pull-request-generator/issues/42)
+
+feature body
+
+Closes #42
+
+"""
     create_branch_handler(event)
     event.repository.create_pull.assert_called_once_with(
         "master",
-        "feature",
+        "issue-42",
         title="feature",
-        body="PR automatically created",
+        body=expected_body,
         draft=False,
     )
     event.repository.create_pull.return_value.enable_automerge.assert_called_once_with(
@@ -47,7 +58,7 @@ def test_create_pr_no_commits(event):
     """
     event.repository.get_pulls.return_value = []
     event.repository.create_pull.side_effect = GithubException(
-        422, message="No commits between 'master' and 'feature'"
+        422, message="No commits between 'master' and 'issue-42'"
     )
     create_branch_handler(event)
 
