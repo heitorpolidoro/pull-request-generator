@@ -112,7 +112,7 @@ def test_enable_just_automerge_on_existing_pr(event):
 
 class TestApp(TestCase):
     def setUp(self):
-        self.app = app.test_client()
+        self.app = self.app = self.app = self.app = app.test_client()
 
     def tearDown(self):
         sentry_sdk.flush()
