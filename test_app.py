@@ -113,6 +113,8 @@ class TestApp(TestCase):
         It mocks the `handle` function of the `webhook_handler` module, sends a POST request to the root endpoint ("/")
         with a specific JSON payload and headers, and checks that the `handle` function is called with the correct
         arguments.
+        
+        Specifically, it verifies that the `handle` function is called with the correct headers and request JSON.
         """
         with patch("app.webhook_handler.handle") as mock_handle:
             request_json = {"action": "opened", "number": 1}
@@ -130,3 +132,7 @@ class TestApp(TestCase):
     This test case tests the root endpoint of the application.
     It verifies that the response status code is 200 and the response text is "Pull Request Generator App up and running!".
     """
+        """
+        This test case tests the root endpoint of the application.
+        It verifies that the response status code is 200 and the response text is "Pull Request Generator App up and running!".
+        """
