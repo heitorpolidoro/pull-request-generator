@@ -48,11 +48,12 @@ def create_pr(repo: Repository, branch: str) -> Optional[PullRequest]:
             issue = repo.get_issue(issue_num)
             if title is None:
                 title = issue.title
-            body += Template(BODY_ISSUE_TEMPLATE).substitute(
-                issue_num=issue_num,
-                repo_full_name=repo.full_name,
-                body=issue.body
-            ) + "\n\n"
+            body += (
+                Template(BODY_ISSUE_TEMPLATE).substitute(
+                    issue_num=issue_num, repo_full_name=repo.full_name, body=issue.body
+                )
+                + "\n\n"
+            )
         pr = repo.create_pull(
             repo.default_branch,
             branch,
