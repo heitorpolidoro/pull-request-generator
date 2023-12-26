@@ -7,6 +7,8 @@ It provides functions to get existing PRs, create new PRs, and handle errors fro
 # rest of module
 
 import logging
+import re
+from string import Template
 from typing import Optional
 
 from github import GithubException
@@ -14,6 +16,13 @@ from github.PullRequest import PullRequest
 from github.Repository import Repository
 
 logger = logging.getLogger(__name__)
+BODY_ISSUE_TEMPLATE = """### [$title](https://github.com/$repo_full_name/issues/$issue_num)
+
+$body
+
+Closes #$issue_num
+
+"""
 
 
 def get_existing_pr(repo: Repository, head: str) -> Optional[PullRequest]:
@@ -29,6 +38,9 @@ def get_existing_pr(repo: Repository, head: str) -> Optional[PullRequest]:
 def create_pr(repo: Repository, branch: str) -> Optional[PullRequest]:
     """
     Creates a PR from the default branch to the given branch.
+
+    If the branch name match a issue-9999 pattern, the title and the body of the PR will be generated using
+    the information from the issue
     :param repo: The Repository to create the PR in.
     :param branch:
     :return: Created PR or None.
@@ -36,11 +48,22 @@ def create_pr(repo: Repository, branch: str) -> Optional[PullRequest]:
     in that case ignores the exception and it returns None.
     """
     try:
+        title = ""
+        body = ""
+        for issue_num in re.findall(r"issue-(\d+)", branch, re.IGNORECASE):
+            issue = repo.get_issue(int(issue_num))
+            title = title or issue.title
+            body += Template(BODY_ISSUE_TEMPLATE).substitute(
+                title=issue.title,
+                repo_full_name=repo.full_name,
+                issue_num=issue_num,
+                body=issue.body,
+            )
         pr = repo.create_pull(
             repo.default_branch,
             branch,
-            title=branch,
-            body="PR automatically created",
+            title=title or branch,
+            body=body or "PR automatically created",
             draft=False,
         )
         return pr
