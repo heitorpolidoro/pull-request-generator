@@ -125,6 +125,7 @@ class TestApp(TestCase):
             }
             self.app.post("/", headers=headers, json=request_json)
             mock_handle.assert_called_once_with(headers, request_json)
+
     """
     This test case tests the root endpoint of the application.
     It verifies that the response status code is 200 and the response text is "Pull Request Generator App up and running!".
