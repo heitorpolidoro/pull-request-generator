@@ -48,6 +48,9 @@ def create_branch_handler(event: CreateBranchEvent) -> None:
 @app.route("/", methods=["GET"])
 def root() -> str:
     """
+    This function is the root of the application, it handles GET requests to the root URL ("/").
+    It does not take any parameters and returns a string which is the response to the GET request.
+    """
     This route displays the welcome screen of the application.
     It uses the root function of the webhook_handler to generate the welcome screen.
     """
