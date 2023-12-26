@@ -49,8 +49,6 @@ def create_branch_handler(event: CreateBranchEvent):
 def root():
     """Welcome screen"""
     return webhook_handler.root("Pull Request Generator")()
-
-
 @app.route("/", methods=["POST"])
 def webhook():
     """Endpoint that receive the github webhook call"""
