@@ -7,7 +7,6 @@ import sentry_sdk
 from github import GithubException
 
 # Import the test cases for the create_branch_handler function
-from tests.test_create_branch_handler import *
 
 
 @pytest.fixture
