@@ -1,11 +1,22 @@
+"""
+This module contains functions for handling pull requests from GitHub webhooks.
+
+It provides functions to get existing PRs, create new PRs, and handle errors from the GitHub API.
+"""
+
+# rest of module
+
 import logging
+from typing import Optional
 
 from github import GithubException
+from github.PullRequest import PullRequest
+from github.Repository import Repository
 
 logger = logging.getLogger(__name__)
 
 
-def get_existing_pr(repo, head):
+def get_existing_pr(repo: Repository, head: str) -> Optional[PullRequest]:
     """
     Returns an existing PR if it exists.
     :param repo: The Repository to get the PR from.
@@ -15,7 +26,7 @@ def get_existing_pr(repo, head):
     return next(iter(repo.get_pulls(state="open", head=head)), None)
 
 
-def create_pr(repo, branch):
+def create_pr(repo: Repository, branch: str) -> Optional[PullRequest]:
     """
     Creates a PR from the default branch to the given branch.
     :param repo: The Repository to create the PR in.
@@ -43,7 +54,7 @@ def create_pr(repo, branch):
     return None
 
 
-def enable_auto_merge(pr):
+def enable_auto_merge(pr: PullRequest) -> None:
     """
     Enables auto merge for the given PR.
     :param pr: The PR to enable auto merge for.
@@ -51,7 +62,7 @@ def enable_auto_merge(pr):
     pr.enable_automerge(merge_method="SQUASH")
 
 
-def get_or_create_pr(repository, branch):
+def get_or_create_pr(repository: Repository, branch: str) -> Optional[PullRequest]:
     """
     Get a existing PR or create a new one if none exists
     :param repository:
