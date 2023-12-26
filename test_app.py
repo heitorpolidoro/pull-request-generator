@@ -92,7 +92,7 @@ def test_enable_just_automerge_on_existing_pr(event):
     """
     This test case tests the create_branch_handler function when a pull request already exists for the new branch.
     It checks that the function enables auto-merge for the existing pull request and does not create a new pull request.
-    
+
     The purpose of this test case is to verify that the create_branch_handler function correctly handles the situation
     where a pull request already exists for the new branch by enabling auto-merge for the existing pull request.
     """
