@@ -31,8 +31,8 @@ logging.basicConfig(
 @webhook_handler.webhook_handler(CreateBranchEvent)
 def create_branch_handler(event: CreateBranchEvent) -> None:
     """
-    This function is a webhook handler that creates a pull request when a new branch is created.
-    It takes a CreateBranchEvent object as a parameter, which contains information about the new branch.
+    Function to handle the creation of a new branch.
+    
     If a pull request already exists for the new branch, the function enables auto-merge for the pull request.
     Otherwise, it creates a new pull request and enables auto-merge for it.
     """
@@ -42,6 +42,11 @@ def create_branch_handler(event: CreateBranchEvent) -> None:
     logger.info(
         "Branch %s:%s created in %s",
         repository.owner.login,
+        branch,
+        repository.full_name,
+    )
+    if pr := get_or_create_pr(repository, branch):
+        enable_auto_merge(pr)
         branch,
         repository.full_name,
     )
