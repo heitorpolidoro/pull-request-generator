@@ -56,7 +56,10 @@ def root():
 
 @app.route("/", methods=["POST"])
 def webhook():
-    """Endpoint that receive the github webhook call"""
+    """
+    This route is the endpoint that receives the GitHub webhook call.
+    It handles the headers and body of the request, and passes them to the webhook_handler for processing.
+    """
     headers = dict(request.headers)
     body = request.json
     webhook_handler.handle(headers, body)
