@@ -52,13 +52,13 @@ def test_create_pr(event):
     """
     This test case tests the create_branch_handler function when there are commits between the new branch and the
     default branch. It checks that the function creates a pull request with the correct parameters.
-    
+
     Expected behavior:
     - The function should create a pull request with the title "feature".
     - The pull request body should include a link to the issue with the title "feature" and the body "feature body".
     - The pull request body should include the text "Closes #42".
     - The pull request should not be a draft.
-    
+
     """
     expected_body = """### [feature](https://github.com/heitorpolidoro/pull-request-generator/issues/42)
 
