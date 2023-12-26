@@ -46,6 +46,8 @@ def event(repository, issue):
     event.repository = repository
     event.repository.get_issue.return_value = issue
     event.ref = "issue-42"
+    event.repository.get_issue.return_value = issue
+    event.ref = "issue-42"
     return event
 
 
