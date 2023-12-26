@@ -7,6 +7,8 @@ It provides functions to get existing PRs, create new PRs, and handle errors fro
 # rest of module
 
 import logging
+import re
+from string import Template
 from typing import Optional
 
 from github import GithubException
@@ -14,6 +16,10 @@ from github.PullRequest import PullRequest
 from github.Repository import Repository
 
 logger = logging.getLogger(__name__)
+BODY_ISSUE_TEMPLATE = """### [$issue_num](https://github.com/$repo_full_name/issues/$issue_num)
+
+$body
+"""
 
 
 def get_existing_pr(repo: Repository, head: str) -> Optional[PullRequest]:
@@ -36,11 +42,22 @@ def create_pr(repo: Repository, branch: str) -> Optional[PullRequest]:
     in that case ignores the exception and it returns None.
     """
     try:
+        title = None
+        body = ""
+        for issue_num in re.findall(r"issue-(\d+)", branch, re.IGNORECASE):
+            issue = repo.get_issue(issue_num)
+            if title is None:
+                title = issue.title
+            body += Template(BODY_ISSUE_TEMPLATE).substitute(
+                issue_num=issue_num,
+                repo_full_name=repo.full_name,
+                body=issue.body
+            ) + "\n\n"
         pr = repo.create_pull(
             repo.default_branch,
             branch,
-            title=branch,
-            body="PR automatically created",
+            title=title or branch,
+            body=body or "PR automatically created",
             draft=False,
         )
         return pr
