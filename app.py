@@ -51,7 +51,7 @@ def root() -> str:
     This route displays the welcome screen of the application.
     It uses the root function of the webhook_handler to generate the welcome screen.
     """
-    return webhook_handler.root("Pull Request Generator")()
+    return webhook_handler.root(app.name)()
 
 
 @app.route("/", methods=["POST"])
