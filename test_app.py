@@ -25,6 +25,9 @@ def test_create_pr(event):
     """
     This test case tests the create_branch_handler function when there are commits between the new branch and the
     default branch. It checks that the function creates a pull request with the correct parameters.
+
+    Specifically, it verifies that the create_branch_handler function is called with the correct arguments and that
+    the enable_automerge method is called on the created pull request with the correct merge method.
     """
     event.repository.get_pulls.return_value = []
     create_branch_handler(event)
