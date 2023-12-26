@@ -18,6 +18,10 @@ def event():
     event = Mock()
     event.repository.default_branch = "master"
     event.repository.full_name = "heitorpolidoro/pull-request-generator"
+    event.repository.get_pulls.return_value = []
+    event.repository.get_issue.return_value.title = "feature"
+    event.repository.get_issue.return_value.body = "feature body"
+    event.repository.get_issue.return_value.number = 42
     event.ref = "issue-42"
     return event
 
@@ -27,10 +31,6 @@ def test_create_pr(event):
     This test case tests the create_branch_handler function when there are commits between the new branch and the
     default branch. It checks that the function creates a pull request with the correct parameters.
     """
-    event.repository.get_pulls.return_value = []
-    event.repository.get_issue.return_value.title = "feature"
-    event.repository.get_issue.return_value.body = "feature body"
-    event.repository.get_issue.return_value.number = 42
     expected_body = """### [feature](https://github.com/heitorpolidoro/pull-request-generator/issues/42)
 
 feature body
@@ -56,7 +56,6 @@ def test_create_pr_no_commits(event):
     This test case tests the create_branch_handler function when there are no commits between the new branch and the
     default branch. It checks that the function handles this situation correctly by not creating a pull request.
     """
-    event.repository.get_pulls.return_value = []
     event.repository.create_pull.side_effect = GithubException(
         422, message="No commits between 'master' and 'issue-42'"
     )
@@ -68,7 +67,6 @@ def test_create_pr_other_exceptions(event):
     This test case tests the create_branch_handler function when an exception other than 'No commits between master and
     feature' is raised. It checks that the function raises the exception as expected.
     """
-    event.repository.get_pulls.return_value = []
     event.repository.create_pull.side_effect = GithubException(
         422, message="Other exception"
     )

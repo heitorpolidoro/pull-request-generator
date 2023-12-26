@@ -38,6 +38,9 @@ def get_existing_pr(repo: Repository, head: str) -> Optional[PullRequest]:
 def create_pr(repo: Repository, branch: str) -> Optional[PullRequest]:
     """
     Creates a PR from the default branch to the given branch.
+
+    If the branch name match a issue-9999 pattern, the title and the body of the PR will be generated using
+    the information from the issue
     :param repo: The Repository to create the PR in.
     :param branch:
     :return: Created PR or None.
@@ -45,7 +48,7 @@ def create_pr(repo: Repository, branch: str) -> Optional[PullRequest]:
     in that case ignores the exception and it returns None.
     """
     try:
-        title = None
+        title = ""
         body = ""
         for issue_num in re.findall(r"issue-(\d+)", branch, re.IGNORECASE):
             issue = repo.get_issue(int(issue_num))
