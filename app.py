@@ -14,6 +14,7 @@ from githubapp.events import CreateBranchEvent
 from pr_handler import enable_auto_merge, get_or_create_pr
 
 app = Flask("Pull Request Generator")
+app.__doc__ = "This is a Flask application for generating pull requests."
 
 if sentry_dns := os.getenv("SENTRY_DNS"):  # pragma: no cover
     # Initialize Sentry SDK for error logging
@@ -40,7 +41,6 @@ def create_branch_handler(event: CreateBranchEvent):
     logger.info(
         "Branch %s:%s created in %s", repo.owner.login, event.ref, repo.full_name
     )
-
     if pr := get_or_create_pr(event.repository, event.ref):
         enable_auto_merge(pr)
 
