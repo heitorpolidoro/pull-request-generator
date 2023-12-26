@@ -25,6 +25,9 @@ def test_create_pr(event):
     """
     This test case tests the create_branch_handler function when there are commits between the new branch and the
     default branch. It checks that the function creates a pull request with the correct parameters.
+
+    The purpose of this test case is to verify that the create_branch_handler function correctly creates a pull request
+    with the specified parameters when there are commits between the new branch and the default branch.
     """
     event.repository.get_pulls.return_value = []
     create_branch_handler(event)
@@ -44,6 +47,9 @@ def test_create_pr_no_commits(event):
     """
     This test case tests the create_branch_handler function when there are no commits between the new branch and the
     default branch. It checks that the function handles this situation correctly by not creating a pull request.
+
+    The purpose of this test case is to verify that the create_branch_handler function correctly handles the situation
+    where there are no commits between the new branch and the default branch by not creating a pull request.
     """
     event.repository.get_pulls.return_value = []
     event.repository.create_pull.side_effect = GithubException(
@@ -56,6 +62,9 @@ def test_create_pr_other_exceptions(event):
     """
     This test case tests the create_branch_handler function when an exception other than 'No commits between master and
     feature' is raised. It checks that the function raises the exception as expected.
+
+    The purpose of this test case is to verify that the create_branch_handler function correctly raises the expected
+    exception when an exception other than 'No commits between master and feature' is raised.
     """
     event.repository.get_pulls.return_value = []
     event.repository.create_pull.side_effect = GithubException(
