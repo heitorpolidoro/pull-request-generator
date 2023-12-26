@@ -28,7 +28,7 @@ logging.basicConfig(
 
 
 @webhook_handler.webhook_handler(CreateBranchEvent)
-def create_branch_handler(event: CreateBranchEvent):
+def create_branch_handler(event: CreateBranchEvent) -> None:
     """
     This function is a webhook handler that creates a pull request when a new branch is created.
     It takes a CreateBranchEvent object as a parameter, which contains information about the new branch.
@@ -46,13 +46,13 @@ def create_branch_handler(event: CreateBranchEvent):
 
 
 @app.route("/", methods=["GET"])
-def root():
+def root() -> str:
     """Welcome screen"""
     return webhook_handler.root("Pull Request Generator")()
 
 
 @app.route("/", methods=["POST"])
-def webhook():
+def webhook() -> str:
     """Endpoint that receive the github webhook call"""
     headers = dict(request.headers)
     body = request.json
