@@ -36,12 +36,13 @@ def create_branch_handler(event: CreateBranchEvent) -> None:
     If a pull request already exists for the new branch, the function enables auto-merge for the pull request.
     Otherwise, it creates a new pull request and enables auto-merge for it.
     """
-    repo = event.repository
+    repository = event.repository
+    branch = event.ref
     # Log branch creation
     logger.info(
-        "Branch %s:%s created in %s", repo.owner.login, event.ref, repo.full_name
+        "Branch %s:%s created in %s", repository.owner.login, branch, repository.full_name
     )
-    if pr := get_or_create_pr(event.repository, event.ref):
+    if pr := get_or_create_pr(repository, branch):
         enable_auto_merge(pr)
 
 
