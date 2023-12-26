@@ -40,7 +40,10 @@ def create_branch_handler(event: CreateBranchEvent) -> None:
     branch = event.ref
     # Log branch creation
     logger.info(
-        "Branch %s:%s created in %s", repository.owner.login, branch, repository.full_name
+        "Branch %s:%s created in %s",
+        repository.owner.login,
+        branch,
+        repository.full_name,
     )
     if pr := get_or_create_pr(repository, branch):
         enable_auto_merge(pr)
