@@ -14,6 +14,7 @@ from githubapp.events import CreateBranchEvent
 from pr_handler import enable_auto_merge, get_or_create_pr
 
 app = Flask("Pull Request Generator")
+app.__doc__ = "This is a Flask application for generating pull requests."
 
 if sentry_dns := os.getenv("SENTRY_DNS"):  # pragma: no cover
     # Initialize Sentry SDK for error logging
@@ -40,20 +41,25 @@ def create_branch_handler(event: CreateBranchEvent) -> None:
     logger.info(
         "Branch %s:%s created in %s", repo.owner.login, event.ref, repo.full_name
     )
-
     if pr := get_or_create_pr(event.repository, event.ref):
         enable_auto_merge(pr)
 
 
 @app.route("/", methods=["GET"])
 def root() -> str:
-    """Welcome screen"""
+    """
+    This route displays the welcome screen of the application.
+    It uses the root function of the webhook_handler to generate the welcome screen.
+    """
     return webhook_handler.root("Pull Request Generator")()
 
 
 @app.route("/", methods=["POST"])
 def webhook() -> str:
-    """Endpoint that receive the github webhook call"""
+    """
+    This route is the endpoint that receives the GitHub webhook call.
+    It handles the headers and body of the request, and passes them to the webhook_handler for processing.
+    """
     headers = dict(request.headers)
     body = request.json
     webhook_handler.handle(headers, body)
