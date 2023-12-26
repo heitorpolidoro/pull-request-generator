@@ -15,7 +15,7 @@ from pr_handler import enable_auto_merge, get_or_create_pr
 
 app = Flask("Pull Request Generator")
 
-if sentry_dns := os.getenv("SENTRY_DSN"):  # pragma: no cover
+if sentry_dns := os.getenv("SENTRY_DNS"):  # pragma: no cover
     # Initialize Sentry SDK for error logging
     sentry_sdk.init(sentry_dns)
 
