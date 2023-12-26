@@ -57,6 +57,12 @@ def create_pr(repo: Repository, branch: str) -> Optional[PullRequest]:
 def enable_auto_merge(pr: PullRequest) -> None:
     """
     Enables auto merge for the given PR.
+    This function takes a PullRequest object as a parameter and enables the auto merge feature for it.
+    The merge method used is "SQUASH".
+    :param pr: The PR to enable auto merge for.
+    :return: None
+    """
+    Enables auto merge for the given PR.
     :param pr: The PR to enable auto merge for.
     """
     pr.enable_automerge(merge_method="SQUASH")
