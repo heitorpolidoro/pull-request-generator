@@ -1,5 +1,8 @@
 # PullRequestGenerator
-An App to help to create Pull Requests
+An App that automatically creates Pull Request when a new branch is created.
+
+If the branch name is "issue-123" the title and the body of the Pull Request will be extracted from the Github issue
+"123"
 
 [![Coverage](https://sonarcloud.io/api/project_badges/measure?project=heitorpolidoro_pull-request-generator&metric=coverage)](https://sonarcloud.io/summary/new_code?id=heitorpolidoro_pull-request-generator)
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=heitorpolidoro_pull-request-generator&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=heitorpolidoro_pull-request-generator)
