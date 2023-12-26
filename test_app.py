@@ -50,6 +50,9 @@ def test_create_pr_no_commits(event):
 
     The purpose of this test case is to verify that the create_branch_handler function correctly handles the situation
     where there are no commits between the new branch and the default branch by not creating a pull request.
+
+    Specifically, this test case verifies that the create_branch_handler function does not create a pull request when
+    there are no commits between the new branch and the default branch.
     """
     event.repository.get_pulls.return_value = []
     event.repository.create_pull.side_effect = GithubException(
