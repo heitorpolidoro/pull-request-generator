@@ -2,6 +2,7 @@
 This file contains the main application logic for the Pull Request Generator. It includes a webhook handler for creating pull requests when new branches are created.
 """
 import logging
+import os
 import sys
 
 import sentry_sdk
@@ -11,11 +12,12 @@ from githubapp.events import CreateBranchEvent
 
 from pr_handler import enable_auto_merge, get_or_create_pr
 
-# Create a Flask app
 app = Flask("Pull Request Generator")
-sentry_sdk.init(
-    "https://575b73d4722bd4f8cc8bafb0274e4480@o305287.ingest.sentry.io/4506434483453952"
-)
+
+if sentry_dns := os.getenv("SENTRY_DNS"):  # pragma: no cover
+    # Initialize Sentry SDK for error logging
+    sentry_sdk.init(sentry_dns)
+
 logger = logging.getLogger(__name__)
 logging.basicConfig(
     stream=sys.stdout,
