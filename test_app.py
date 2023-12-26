@@ -47,6 +47,9 @@ def test_create_pr_no_commits(event):
     """
     This test case tests the create_branch_handler function when there are no commits between the new branch and the
     default branch. It checks that the function handles this situation correctly by not creating a pull request.
+    
+    Specifically, it verifies that the create_branch_handler function is called with the correct arguments and that
+    the enable_automerge method is not called.
     """
     event.repository.get_pulls.return_value = []
     event.repository.create_pull.side_effect = GithubException(
@@ -76,6 +79,7 @@ def test_enable_just_automerge_on_existing_pr(event):
     existing_pr = Mock()
     event.repository.get_pulls.return_value = [existing_pr]
     create_branch_handler(event)
+    event.repository.create_pull.return_value.enable_automerge.assert_not_called()
     event.repository.create_pull.assert_not_called()
     existing_pr.enable_automerge.assert_called_once_with(merge_method="SQUASH")
 
