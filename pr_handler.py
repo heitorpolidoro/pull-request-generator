@@ -70,10 +70,14 @@ def enable_auto_merge(pr: PullRequest) -> None:
 
 def get_or_create_pr(repository: Repository, branch: str) -> Optional[PullRequest]:
     """
-    Get a existing PR or create a new one if none exists
-    :param repository:
-    :param branch:
-    :return: The created or recovered PR or None if no commits between 'master' and 'branch'
+    This function either retrieves an existing pull request (PR) or creates a new one if none exists.
+    It takes a Repository object and a branch name as parameters.
+    If a PR already exists for the given branch, it retrieves and returns the PR.
+    If no PR exists, it creates a new PR for the branch.
+    If there are no commits between the 'master' branch and the given branch, it returns None.
+    :param repository: The Repository object to get or create the PR in.
+    :param branch: The name of the branch to get or create a PR for.
+    :return: The existing or newly created PR, or None if there are no commits between 'master' and the given branch.
     """
     if pr := get_existing_pr(repository, f"{repository.owner.login}:{branch}"):
         print(
