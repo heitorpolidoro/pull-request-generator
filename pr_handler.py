@@ -55,7 +55,7 @@ def create_pr(repo: Repository, branch: str) -> Optional[PullRequest]:
                 title=issue.title,
                 repo_full_name=repo.full_name,
                 issue_num=issue_num,
-                body=issue.body
+                body=issue.body,
             )
         pr = repo.create_pull(
             repo.default_branch,
