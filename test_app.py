@@ -47,7 +47,7 @@ def test_create_pr_no_commits(event):
     """
     This test case tests the create_branch_handler function when there are no commits between the new branch and the
     default branch. It checks that the function handles this situation correctly by not creating a pull request.
-    
+
     Specifically, it verifies that the create_branch_handler function is called with the correct arguments and that
     the enable_automerge method is not called.
     """
