@@ -49,6 +49,9 @@ def test_create_pr_no_commits(event):
     default branch. It checks that the function handles this situation correctly by not creating a pull request.
 
     The purpose of this test case is to verify that the create_branch_handler function correctly handles the situation
+    where there are no commits between the new branch and the default branch by not creating a pull request.
+
+    Specifically, this test case verifies that the create_branch_handler function does not create a pull request when
     there are no commits between the new branch and the default branch.
 
     Specifically, this test case verifies that the create_branch_handler function does not create a pull request when
@@ -89,6 +92,9 @@ def test_enable_just_automerge_on_existing_pr(event):
     """
     This test case tests the create_branch_handler function when a pull request already exists for the new branch.
     It checks that the function enables auto-merge for the existing pull request and does not create a new pull request.
+    
+    The purpose of this test case is to verify that the create_branch_handler function correctly handles the situation
+    where a pull request already exists for the new branch by enabling auto-merge for the existing pull request.
     """
     existing_pr = Mock()
     event.repository.get_pulls.return_value = [existing_pr]
