@@ -30,6 +30,8 @@ jobs:
         with:
           name: coverage.xml
 
+      - run: env
+
       - name: BuildPulse
         uses: buildpulse/buildpulse-action@v0.11.0
         with:
