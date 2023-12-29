@@ -22,9 +22,6 @@ dynamic = ["version", "dependencies"]
 [project.urls]
 "Homepage" = "https://github.com/heitorpolidoro/PyGithubApp"
 
-[tool.setuptools]
-packages = ["githubapp"]
-
 [tool.setuptools.dynamic]
 version = {attr = "githubapp.__version__"}
 dependencies = {file = ["requirements.txt"]}
@@ -33,10 +30,6 @@ dependencies = {file = ["requirements.txt"]}
 source = ["."]
 omit = ["test_*"]
 relative_files = true
-
-[project.optional-dependencies]
-flask = ["flask"]
-
 
 [tool.black]
 max_line_length = 120
