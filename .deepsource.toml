@@ -17,3 +17,4 @@ enabled = true
 
 [[transformers]]
 name = "isort"
+enabled = true
