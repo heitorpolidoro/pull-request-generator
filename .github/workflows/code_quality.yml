@@ -16,3 +16,27 @@ jobs:
     secrets:
       SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
       DEEPSOURCE_DSN: ${{ secrets.DEEPSOURCE_DSN }}
+
+  build_pulse:
+    name: Build Pulse
+    needs: code_quality
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # Shallow clones should be disabled for a better relevancy of analysis
+
+      - uses: actions/download-artifact@v4
+        with:
+          name: coverage.xml
+
+      - run: env
+
+      - name: BuildPulse
+        uses: buildpulse/buildpulse-action@v0.11.0
+        with:
+          account: 14806300
+          repository: 733482397
+          path: coverage.xml # <path-to-xml-reports>
+          key: ${{ secrets.BUILDPULSE_ACCESS_KEY_ID }}
+          secret: ${{ secrets.BUILDPULSE_SECRET_ACCESS_KEY }}
