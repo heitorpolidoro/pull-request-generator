@@ -100,9 +100,7 @@ def test_create_pr_other_exceptions(event, repository):
     - The function should raise a GithubException with the message "Other exception".
 
     """
-    repository.create_pull.side_effect = GithubException(
-        422, message="Other exception"
-    )
+    repository.create_pull.side_effect = GithubException(422, message="Other exception")
     with pytest.raises(GithubException):
         create_branch_handler(event)
 
