@@ -3,32 +3,32 @@ requires = ["setuptools>=61.0"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "GithubAppHandler"
+name = "PullRequestGenerator"
 authors = [
     { name="Heitor Luis Polidoro" },
 ]
-description = "Package to help creates Github Apps."
+description = "App to automatcaly create Pull Requests."
 readme = "README.md"
 requires-python = ">=3.9"
-keywords = ["github", "app", "githubapp"]
+keywords = ["github", "app", "githubapp", "pull", "pr", "pull request"]
 license = { text = "MIT" }
 classifiers = [
     "Programming Language :: Python :: 3",
     "License :: OSI Approved :: MIT License",
     "Operating System :: OS Independent",
 ]
-dynamic = ["version", "dependencies"]
+dynamic = ["dependencies"]
+version = "0.0"
 
 [project.urls]
-"Homepage" = "https://github.com/heitorpolidoro/PyGithubApp"
+"Homepage" = "https://github.com/heitorpolidoro/pull-request-generator"
 
 [tool.setuptools.dynamic]
-version = {attr = "githubapp.__version__"}
 dependencies = {file = ["requirements.txt"]}
 
 [tool.coverage.run]
 source = ["."]
-omit = ["test_*"]
+omit = ["tests/*"]
 relative_files = true
 
 [tool.black]
