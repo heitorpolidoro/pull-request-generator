@@ -7,7 +7,7 @@ import os
 import sys
 
 import sentry_sdk
-from flask import Flask, request
+from flask import Flask
 from githubapp import webhook_handler
 from githubapp.events import CreateBranchEvent
 

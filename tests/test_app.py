@@ -1,12 +1,10 @@
 """This file contains test cases for the Pull Request Generator application."""
-from unittest import TestCase
-from unittest.mock import Mock, patch
+from unittest.mock import Mock
 
 import pytest
-import sentry_sdk
 from github import GithubException
 
-from src.app import app, create_branch_handler
+from src.app import create_branch_handler
 
 
 @pytest.fixture
