@@ -13,8 +13,12 @@ from githubapp.events import CreateBranchEvent
 
 from pr_handler import enable_auto_merge, get_or_create_pr
 
-app = Flask("Pull Request Generator")
-app.__doc__ = "This is a Flask application for generating pull requests."
+logger = logging.getLogger(__name__)
+logging.basicConfig(
+    stream=sys.stdout,
+    format="%(levelname)s:%(module)s:%(funcName)s:%(message)s",
+    level=logging.INFO,
+)
 
 
 def sentry_init():  # pragma: no cover
@@ -34,15 +38,9 @@ def sentry_init():  # pragma: no cover
         logger.info("Sentry initialized")
 
 
+app = Flask("Pull Request Generator")
 sentry_init()
 webhook_handler.handle_with_flask(app)
-
-logger = logging.getLogger(__name__)
-logging.basicConfig(
-    stream=sys.stdout,
-    format="%(levelname)s:%(module)s:%(funcName)s:%(message)s",
-    level=logging.INFO,
-)
 
 
 @webhook_handler.webhook_handler(CreateBranchEvent)
