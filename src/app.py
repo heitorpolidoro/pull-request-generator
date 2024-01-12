@@ -17,8 +17,9 @@ app = Flask("Pull Request Generator")
 app.__doc__ = "This is a Flask application for generating pull requests."
 
 
-def sentry_init():
-    if sentry_dns := os.getenv("SENTRY_DSN"):  # pragma: no cover
+def sentry_init():  # pragma: no cover
+    """ Initialize sentry only if SENTRY_DSN is present """
+    if sentry_dns := os.getenv("SENTRY_DSN"):
         # Initialize Sentry SDK for error logging
         sentry_sdk.init(
             dsn=sentry_dns,
