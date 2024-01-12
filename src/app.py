@@ -18,7 +18,7 @@ app.__doc__ = "This is a Flask application for generating pull requests."
 
 
 def sentry_init():  # pragma: no cover
-    """ Initialize sentry only if SENTRY_DSN is present """
+    """Initialize sentry only if SENTRY_DSN is present"""
     if sentry_dns := os.getenv("SENTRY_DSN"):
         # Initialize Sentry SDK for error logging
         sentry_sdk.init(
