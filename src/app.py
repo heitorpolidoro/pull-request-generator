@@ -41,7 +41,9 @@ def sentry_init():  # pragma: no cover
 app = Flask("Pull Request Generator")
 __version__ = "0.1"
 sentry_init()
-webhook_handler.handle_with_flask(app, version=__version__, versions_to_show=["github-app-handler"])
+webhook_handler.handle_with_flask(
+    app, version=__version__, versions_to_show=["github-app-handler"]
+)
 
 
 @webhook_handler.webhook_handler(CreateBranchEvent)
