@@ -39,6 +39,7 @@ def sentry_init():  # pragma: no cover
 
 
 app = Flask("Pull Request Generator")
+__version__ = "0.0"
 sentry_init()
 webhook_handler.handle_with_flask(app)
 
